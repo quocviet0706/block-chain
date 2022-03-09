@@ -1,5 +1,6 @@
 const Wallet = artifacts.require('Wallet');
 const {expectRevert} = require('@openzeppelin/test-helpers');
+//test cac truong hơpp giao dich
 
 contract('Wallet',(accounts)=>{
     let wallet;
@@ -28,17 +29,20 @@ contract('Wallet',(accounts)=>{
 
     });
     it('should NOT create transfers if sender is not approved', async() =>{
+       //truong hop dung try catch se xuat hien thong bao only approver allowed
         // try {
         //     await wallet.createTransfer(100, accounts[5], {from: accounts[4]})
         //     }
         // catch(e){
         //     console.log(e);
         // }
+        //truong hop kkhong dung try catch
         await expectRevert(
             wallet.createTransfer(100, accounts[5], {from: accounts[4]}),
             'only approver allowed'
         );
     });
+    //truong hop xet mot nguoi khong duoc gui
     it('should increment approvals', async() =>{
         await wallet.createTransfer(100, accounts[5], {from:accounts[0]});
         await wallet.approveTransfer(0,{from:accounts[0]});
@@ -48,6 +52,7 @@ contract('Wallet',(accounts)=>{
         assert(transfers[0].sent === false);
         assert(balance === '1000');
     });
+    //truong hop xet du 2 nguoi
     it('should send the transfer if the quorum reached', async() =>{
         const balanceBefore = web3.utils.toBN(await web3.eth.getBalance(accounts[6]));
         await wallet.createTransfer(100, accounts[6], {from:accounts[0]});

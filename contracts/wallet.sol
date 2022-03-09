@@ -4,7 +4,7 @@ pragma experimental ABIEncoderV2;
 contract Wallet{
     address[] public approvers;
     uint public quorum;
-    
+    //khoi tao construct trong giao dich
     struct Transfer{
         uint id;
         uint amount;
@@ -19,15 +19,15 @@ contract Wallet{
         approvers = _approvers;
         quorum = _quorum;
     }
-    
+    //Trường hợp người kiểm duyệt
     function getApprovers() external view returns(address[] memory){
         return approvers;
     }
-
+    //trường hợp giao dịch chuyển tiền
     function getTransfers() external view returns(Transfer[] memory){
         return transfers;
     }
-
+    //truong hop tao giao dich
     function createTransfer(uint amount, address payable to) external onlyApprover(){
     transfers.push(Transfer(
       transfers.length,
@@ -38,6 +38,7 @@ contract Wallet{
       )
     );
     }
+    //xet truong hop nguoi kiêm duyet chap nhan va nguoc lai
     function approveTransfer(uint id) external onlyApprover() {
         require(transfers[id].sent == false, "Transfer has already been sent");
         require(approvals[msg.sender][id] == false, "cannot approve transfer twice");
@@ -60,6 +61,7 @@ contract Wallet{
                 allowed = true;
             }
         }
+        //truong hop bat try catch se thong bao
         require(allowed == true, "only approver allowed.");
         _;
     }
